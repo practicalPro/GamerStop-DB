@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamerStop</title>
+    <link rel="stylesheet" type="css" href="/front-end/style.css">
+</head>
+<body>
+    <div id="banner">
+    <a href="/"><img src="../img/gamerstop_title.png" alt="gamerstop title"></a>
+    {{!-- <h1>Welcome to <a href="/">GamerStop</a></h1>
+    <p>Your one stop shop for the latest Video Games and Consoles!</p> --}}
+    </div>
+</body>
+<main>
+    <ul id="navbar">
+        <li><a href="/customer">Customers</a></li>
+        <li><a href="/videogame">Video Games</a></li>
+        <li><a href="/console">Consoles</a></li>
+        <li><a href="/product">Products</a></li>
+        <li><a href="/invoice">Invoices</a></li>
+        <li><a href="/invoiceproduct">Invoice_has_products</a></li>
+    </ul>
+</main>
+
+{{!-- The Data from our Database --}}
+
+{{!-- Create a table --}}
+<table id="invoiceproduct-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th>Edit Relation</th>
+            <th>Delete Relation</th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the invoiceProductID, invoiceID, productID, productNameorConsoleName, in order --}}
+        {{#each data}}
+        <tr>
+            <td align="center">{{this.invoiceProductID}}</td>
+            <td align="center">{{this.invoiceID}}</td>
+            <td align="center">{{this.productID}}</td>
+            <td align="center">{{this.productNameOrConsoleName}}</td>
+            {{!-- change after set up update form --}}
+            <td><button id="moveText" onclick="moveText([{{this.invoiceProductID}}, '{{this.invoiceID}}', '{{this.consoleOrGameName}}'], ['update-IPID', 'update-invoiceID', 'update-productID'])">Edit Relation</button></td>
+            <td><button id="deleteIP" onclick="deleteIP({{this.invoiceProductID}})">Delete Relation</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+    <script src="../js/move-text.js"></script>
+</table>
+
+
+<script src="/front-end/public/js/add-invoiceproduct.js"></script>
+
+
+{{!-- update form:  drop down with invoice id and product name --}}
+<div class="updateForm" style="display:none">
+    <h2>Edit Current Relation</h2>
+    {{!-- <p>Edit only the Order Date and Total Price. Do not change invoice id or customer id!</p> --}}
+    <p class="warning">(Note: Please Select the product again. If Date is the Same, Enter the Same From Above)</p>
+    <form id="update-invoiceproduct-form">
+        <fieldset>
+            <ul id="form-ul">
+                <li>
+                    <label for = "update-IPID">Invoice Product ID: </label>
+                    <input type="text" name="update-IPID" id="update-IPID" value="1" readonly>
+                    </li>
+                <li>
+                    <label for="update-invoiceID">Invoice ID: </label>
+                    <select name="update-invoiceID" id="update-invoiceID" required>
+                        <option value="">Select Invoice ID: </option>
+
+                        {{#each invoiceTable}}
+                        <option value="{{this.invoiceID}}">{{this.invoiceID}}</option>
+                        {{/each}}
+                    </select>
+                </li>
+                <li>
+                    <label for="update-productID">product ID: </label>
+                    <select name="update-productID" id="update-productID" required>
+                        <option value="">Select product ID: </option>
+
+                        {{#each productname}}
+                        <option value="{{this.productID}}">{{this.consoleOrGameName}}</option>
+                        {{/each}}
+                    </select>
+                </li>
+
+
+            </ul>
+
+        </fieldset>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<script src="../js/update-invoiceproduct.js"></script>
+
+
+<h2>Add Relation</h2>
+<p>Add information to the Relation</p>
+{{!-- add form: drop down with invoice id and product name --}}
+{{!-- 1. add function in app.js, drop  --}}
+<form action="/add-invoiceproduct" id="invoiceproduct" method="POST">
+    <label for="input-invoiceID">Invoice ID: </label>
+        <select name="input-invoiceID" id="input-invoiceID" required>
+        <option value="" >Select Invoice ID: </option>
+        
+        {{#each invoiceTable}}
+        <option value="{{this.invoiceID}}">{{this.invoiceID}}</option>
+        {{/each}}
+    </select>
+    <label for="input-productID">product ID: </label>
+        <select name="input-productID" id="input-productID" required>
+        <option value="" >Select product ID: </option>
+        
+        {{#each productname}}
+        <option value="{{this.productID}}">{{this.consoleOrGameName}}</option>
+        {{/each}}
+    </select>
+    <button type="submit">Submit</button>
+</form>
+
+
+<div id="extra-padding"></div>
+<script defer src="../js/delete-invoiceproduct.js" type="text/javascript"></script>

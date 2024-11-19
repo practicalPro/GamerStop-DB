@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamerStop</title>
+    <link rel="stylesheet" type="css" href="/front-end/style.css">
+</head>
+<body>
+    <div id="banner">
+    <a href="/"><img src="../img/gamerstop_title.png" alt="gamerstop title"></a>
+    {{!-- <h1>Welcome to <a href="/">GamerStop</a></h1>
+    <p>Your one stop shop for the latest Video Games and Consoles!</p> --}}
+    </div>
+</body>
+<main>
+    <ul id="navbar">
+        <li><a href="/customer">Customers</a></li>
+        <li><a href="/videogame">Video Games</a></li>
+        <li><a href="/console">Consoles</a></li>
+        <li><a href="/product">Products</a></li>
+        <li><a href="/invoice">Invoices</a></li>
+        <li><a href="/invoiceproduct">Invoice_has_products</a></li>
+    </ul>
+</main>
+{{!-- Just some plain text --}}
+
+<h1>Showing current Invoice!</h1>
+
+{{!-- The Data from our Database --}}
+
+{{!-- Create a table --}}
+<table id="invoice-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th>Edit Invoice</th>
+            <th>Delete Invoice</th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the invoiceID, customerID, Name, orderDate, and totalPrice, in order --}}
+        {{#each data}}
+        <tr>
+            <td align="center">{{this.invoiceID}}</td>
+            <td align="center">{{this.customerID}}</td>
+            <td align="center">{{this.Name}}</td>
+            <td align="center">{{this.orderDate}}</td>
+            <td align="center">{{this.totalPrice}}</td>
+            <td><button id="moveText" onclick='moveText([{{this.invoiceID}}, "{{this.customerID}}", "{{this.orderDate}}", "{{this.totalPrice}}"], ["update-IID", "update-CID","update-OrderDate", "update-TotalPrice"])'>Edit Invoice</button></td>
+            <td><button id="deleteInvoice" onclick="deleteInvoice({{this.invoiceID}})">Delete Invoice</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+    <script src="../js/move-text.js"></script>
+    
+</table>
+
+
+<script src="/front-end/public/js/add-invoice.js"></script>
+
+
+
+<div class="updateForm" style="display:none">
+    <h2>Edit Current invoice</h2>
+<p>Edit only the Order Date and Total Price. Do not change invoice id or customer id!</p>
+<p class="warning">(Note: Please Entered the Date. If Date is the Same, Enter the Same From Above)</p>
+        <form id="update-invoice-form">
+            <fieldset>
+                <ul id="form-ul">
+                    <li>
+                        <label for = "update-IID">Invoice ID: </label>
+                    <input type="text" name="update-IID" id="update-IID" value="1" readonly>
+                    </li>
+                    <li>
+                        <label for = "update-CID">Customer ID: </label>
+                    <input type="text" name="update-CID" id="update-CID" value="1" readonly>
+                    </li>
+                    <li>
+                        <label for = "update-OrderDate">Order Date: </label>
+                    <input type="date" name="update-OrderDate" id="update-OrderDate">
+                    </li>
+                    <li>
+                        <label for = "update-TotalPrice">Total Price: </label>
+                    <input type="text" name="update-TotalPrice" id="update-TotalPrice">
+                    </li>
+
+                </ul>
+
+            </fieldset>
+            <input type="submit" value = "Submit">
+        </form>
+</div>
+<script src="../js/update-invoice.js"></script>
+
+<h2>Add Invoice</h2>
+<p>Add information to the invoice</p>
+
+{{!-- Dropdown table currently not working properly --}}
+<form action="/add-invoice" id="invoice" method="POST">
+    <label for="input-customerid">Customer ID: </label>
+    <select name="input-customerid" id="input-customerid-ajax" required>
+        <option value="">Select Customer ID: </option>
+
+        {{#each customerName}}
+        <option value="{{this.customerID}}">{{this.firstName}}</option>
+        {{/each}}
+    </select>
+    <label for="input-date">Order Date: </label>
+    <input type="date" name="input-date" id="input-date">
+
+    <label for="input-price">Total Price: </label>
+    <input type="text" name="input-price" id="input-price">
+    <button type="submit">Submit</button>
+</form>
+<div id="extra-padding"></div>
+
+
+<script defer src="../js/delete-invoice.js" type="text/javascript"></script>

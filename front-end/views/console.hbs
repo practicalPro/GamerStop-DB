@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamerStop</title>
+    <link rel="stylesheet" type="css" href="/front-end/style.css">
+</head>
+<body>
+    <div id="banner">
+    <a href="/"><img src="../img/gamerstop_title.png" alt="gamerstop title"></a>
+    {{!-- <h1>Welcome to <a href="/">GamerStop</a></h1>
+    <p>Your one stop shop for the latest Video Games and Consoles!</p> --}}
+    </div>
+</body>
+<main>
+    <ul id="navbar">
+        <li><a href="/customer">Customers</a></li>
+        <li><a href="/videogame">Video Games</a></li>
+        <li><a href="/console">Consoles</a></li>
+        <li><a href="/product">Products</a></li>
+        <li><a href="/invoice">Invoices</a></li>
+        <li><a href="/invoiceproduct">Invoice_has_products</a></li>
+    </ul>
+</main>
+{{!-- Just some plain text --}}
+
+<h1>Showing Current Consoles for the Store!</h1>
+
+{{!-- The Data from our Database --}}
+
+{{!-- Create a table --}}
+<table id="console-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th>Edit Console</th>
+            <th>Delete</th>
+        </tr>
+       
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, consoleID, name, manufacturer, releaseDate, and description in order --}}
+        {{#each data}}
+        <tr>
+            <td align="center">{{this.consoleID}}</td>
+            <td align="center">{{this.name}}</td>
+            <td align="center">{{this.manufacturer}}</td>
+            <td align="center">{{this.releaseDate}}</td>
+            <td align="center">{{this.description}}</td>
+            <td><button id="moveText" onclick='moveText([{{this.consoleID}}, "{{this.name}}", "{{this.manufacturer}}", "{{this.releaseDate}}", "{{this.description}}"], ["update-consoleid", "update-name","update-manufacturer", "update-releasedate", "update-description"])'>Edit Console</button></td>
+            <td><button id="deleteConsole" onclick="deleteConsole({{this.consoleID}})">Delete Console</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+    <script src="../js/move-text.js"></script>
+</table>
+{{!-- Section to update the Console Form --}}
+<div class="updateForm" style="display: none;">
+    <h2>Edit Current Consoles</h2>
+    <p>Make changes only to the name, manufacturer, release date, or description. Do not change the consoleID #</p>
+    <form id="update-console-form">
+        <fieldset>
+            <ul id="form-ul">
+                <li><label for="update-consoleid">Console ID: </label>
+            <input type="text" name="update-consoleid" id="update-consoleid" value="console" readonly>
+            </li>
+            <li><label for="update-name">Name: </label>
+            <input type="text" name="update-name" id="update-name" value="console name" >
+            </li>
+            <li><label for="update-manufacturer">Manufacturer: </label>
+            <input type="text" name="update-manufacturer" id="update-manufacturer" value="manufacturer"></li>
+            <li> <label for="update-releasedate">Release Date</label>
+            <input type="date" name="update-releasedate" id="update-releasedate" value="date">
+            </li>
+            <li><label for="update-description">Description</label>
+                        <textarea name="update-description" id="update-description" cols="30" rows="10" value="enter description"></textarea></li>
+            </ul>
+
+        </fieldset>
+        <input type="submit" value="Submit Changes">
+    </form>
+</div>
+<script src="../js/update-console.js"></script>
+
+<h2>Add new console to database</h2>
+<p>Insert console information</p>
+<form action="/add-console" id="add-console" method="POST">
+    <ul id="form-ul">
+        <li>
+            <label for="input-name" >Console Name: </label>
+            <div>
+           <input type="text" name="input-name" id="input-name" required placeholder="Legacy"></li>
+            </div>
+        <li>
+            <label for="input-manufacturer">Manufacturer: </label>
+            <div>
+
+            <input type="text" name="input-manufacturer" id="input-manufacturer" required placeholder="Your Company">
+            </div>
+        </li>
+        <li>
+            <label for="input-releasedate">Release Date: </label>
+            <div>
+
+            <input type="date" name="input-releasedate" id="input-releasedate" required value="2020-01-01">
+            </div>
+        </li>
+        <li>
+            <label for="input-description">Description: </label>
+            <div>
+            <textarea name="input-description" id="input-description" placeholder="Enter Description"></textarea>
+            </div>
+        </li>
+    </ul>
+
+    <button type="submit">Submit</button>
+
+</form>
+<div id="extra-padding"></div>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script defer src="/front-end/public/js/add-console.js"></script>
+<script defer src="../js/delete-console.js" type="text/javascript"></script>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamerStop</title>
+    <link rel="stylesheet" type="css" href="/front-end/style.css">
+</head>
+<body>
+    <div id="banner">
+    <a href="/"><img src="../img/gamerstop_title.png" alt="gamerstop title"></a>
+    {{!-- <h1>Welcome to <a href="/">GamerStop</a></h1>
+    <p>Your one stop shop for the latest Video Games and Consoles!</p> --}}
+    </div>
+</body>
+<main>
+    <ul id="navbar">
+        <li><a href="/customer">Customers</a></li>
+        <li><a href="/videogame">Video Games</a></li>
+        <li><a href="/console">Consoles</a></li>
+        <li><a href="/product">Products</a></li>
+        <li><a href="/invoice">Invoices</a></li>
+        <li><a href="/invoiceproduct">Invoice_has_products</a></li>
+    </ul>
+</main>
+{{!-- Just some plain text --}}
+
+<h1>Showing current Video Games</h1>
+
+{{!-- The Data from our Database --}}
+
+{{!-- Create a table --}}
+<table id="videogame-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the videogameID, title, genre, releaseDate and description, in order --}}
+        {{#each data}}
+        <tr>
+            <td align="center">{{this.videogameID}}</td>
+            <td align="center">{{this.title}}</td>
+            <td align="center">{{this.genre}}</td>
+            <td align="center">{{this.releaseDate}}</td>
+            <td align="center">{{this.description}}</td>
+            <td><button id="moveText" onclick='moveText([{{this.videogameID}}, "{{this.title}}", "{{this.genre}}", "{{this.releaseDate}}", "{{this.description}}"], ["update-ID", "update-title","update-genre", "update-releaseDate", "update-description"])'>Edit Game</button></td>
+            <td align="center"><button id="deleteVideoGame" onclick="deleteVideoGame({{this.videogameID}})">Delete Game</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="../js/move-text.js"></script>
+<script src="../js/delete-videogame.js" type="text/javascript"></script>
+
+<script defer src="/front-end/public/js/add-videogame.js"></script>
+
+{{!-- UPDATE FORM --}}
+
+<div class="updateForm" style="display: none;">
+    <h2>Edit Current Video Game</h2>
+    <p>Edit only the title, genre, release date, and description. Changes to videogameID have been disabled</p>
+    <form id="update-videogame-form">
+        <fieldset>
+            <ul id="form-ul">
+                <li>
+                <label for = "update-ID">VideoGame ID: </label>
+                {{!-- create an arbitrary value in order to add parameter to dataset --}}
+                    <input type="text" name="update-ID" id="update-ID" value="1" readonly>
+                    </li>
+                    <li>
+                        <label for = "update-title">Game Title: </label>
+                        <input type="text" name="update-title" id="update-title" value="Title">
+                    </li>
+                    <li>
+                        <label for = "update-genre">Genre: </label>
+                        <input type="text" name="update-genre" id="update-genre" value="genre">
+                    </li>
+                    <li>
+                        <label for = "update-releaseDate">Release Date: </label>
+                        <input type="date" name="update-releaseDate" id="update-releaseDate" value="2023-01-01" required>
+                    </li>
+                    <li>
+                        <label for = "update-description">Description: </label>
+                        <textarea name="update-description" id="update-description" cols="30" rows="10" value="Best Game Ever"></textarea></li>
+                    </li>
+            </ul>
+        </fieldset>
+        <input type="submit" value="submit">
+    </form>
+    <script src="../js/update-videogame.js"></script>
+</div>
+
+{{!-- ADD VIDEOGAME --}}
+
+<h2>Add Video Game</h2>
+<p>Insert Information for the video game</p>
+<form action="/add-videogame" id="video-game" method="POST">
+    <ul id="form-ul">
+        <li>
+            <label for="input-title">Title: </label>
+            <div>
+            <input type="text" name="input-title" id="input-title" required placeholder="Final Destiny 4">
+            </div>
+        </li>
+        <li>
+            <label for="input-genre">Genre: </label>
+            <div>
+            <input type="text" name="input-genre" id="input-genre" required placeholder="RPG"> 
+            </div>
+        </li>
+        <li>
+            <label for="input-releasedate">Release Date: </label>
+            <div>
+            <input type="date" name="input-releasedate" id="input-releasedate" value="2023-01-01">
+            </div>
+        </li>
+        <li>
+             <label for="input-description">Description: </label>
+             <div>
+             <textarea name="input-description" id="input-description" placeholder="Enter description..." cols="30" rows="25"></textarea>
+             </div>
+        </li>
+    </ul>
+    <button type="submit">Submit</button>
+</form>
+<div id="extra-padding"></div>
